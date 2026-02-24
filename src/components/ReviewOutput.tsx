@@ -2,11 +2,11 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
-import { Button } from "@/components/ui/button";
+import hljs from "highlight.js";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
+import { Button } from "./animate-ui/components/buttons/button";
 
 function CodeBlock({
   className,
@@ -17,13 +17,12 @@ function CodeBlock({
 }) {
   const raw = String(children).replace(/\n$/, "");
   const isInline = !className && !raw.includes("\n");
-
   const language = className?.match(/language-(\w+)/)?.[1];
 
   const [copied, setCopied] = useState(false);
 
-  const copyToClipboard = (code: string) => {
-    navigator.clipboard.writeText(code);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(raw);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -36,22 +35,23 @@ function CodeBlock({
     );
   }
 
+  const highlighted =
+    language && hljs.getLanguage(language)
+      ? hljs.highlight(raw, { language }).value
+      : hljs.highlightAuto(raw).value;
+
   return (
-    <pre className="bg-neutral-900 relative p rounded-xl overflow-auto border border-neutral-800 my-4">
-      <code className={className}>
-        <div className="sticky top-0 flex items-center justify-between border-b py-4 mb-4">
-          <p>{language}</p>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => copyToClipboard(raw)}
-          >
-            {copied ? <Check /> : <Copy />}
-            {copied ? "Copied!" : "Copy"}
-          </Button>
-        </div>
-        <div>{children}</div>
-      </code>
+    <pre className="bg-neutral-900 relative rounded-xl overflow-auto border border-neutral-800 my-4">
+      <div className="sticky top-0 bg-neutral-800 flex items-center justify-between border-b border-neutral-800 px-4 py-2">
+        <p className="text-xs text-neutral-300">{language}</p>
+        <Button size="icon-sm" variant="ghost" onClick={copyToClipboard}>
+          {copied ? <Check /> : <Copy />}
+        </Button>
+      </div>
+      <code
+        className={`hljs language-${language} block p-4 bg-neutral-900!`}
+        dangerouslySetInnerHTML={{ __html: highlighted }}
+      />
     </pre>
   );
 }
@@ -66,10 +66,9 @@ export default function ReviewOutput({ output }: { output: string }) {
   }
 
   return (
-    <div className="w-[80%] mx-auto overflow-y-auto p-8 bg-neutral-950 rounded-2xl border border-neutral-800">
+    <div className="w-[80%] mx-auto overflow-y-auto p-8 bg-neutral-950">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
         components={{
           h2: ({ children }) => (
             <h2 className="text-2xl font-bold mt-8 mb-4 text-white border-b border-neutral-800 pb-2">
