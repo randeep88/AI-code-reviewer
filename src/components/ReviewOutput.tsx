@@ -66,7 +66,7 @@ export default function ReviewOutput({ output }: { output: string }) {
   }
 
   return (
-    <div className="w-[80%] mx-auto overflow-y-auto p-8 bg-neutral-950">
+    <div className="lg:w-[80%] w-full mx-auto overflow-y-auto pt-5 md:pt-0 lg:p-8 p-2 bg-neutral-950">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{

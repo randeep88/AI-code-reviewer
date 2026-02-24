@@ -65,7 +65,7 @@ const CodeInput = ({
 
   return (
     <NoiseBackground
-      containerClassName="w-[80%] h-[90%] p-1 mx-auto flex flex-col relative"
+      containerClassName="lg:w-[80%] w-full h-[90%] p-1 mx-auto flex flex-col relative"
       gradientColors={["red", "orange", "yellow"]}
     >
       <div className="w-full h-full mx-auto dark:bg-card bg-gray-50 rounded-xl relative">
@@ -74,7 +74,7 @@ const CodeInput = ({
           className="h-full flex flex-col"
         >
           <div className="p-2 flex items-center justify-between border-b shrink-0">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col lg:flex-row lg:items-center items-start gap-2">
               <Controller
                 name="language"
                 control={control}

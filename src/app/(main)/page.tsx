@@ -32,7 +32,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-4rem)] px-20">
+    <div className="w-full h-[calc(100vh-4rem)] lg:px-20 px-5">
       <div className="w-full h-full flex items-center">
         <CodeInput
           reviewCode={reviewCode}
